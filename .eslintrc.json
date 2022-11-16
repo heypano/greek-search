@@ -4,14 +4,12 @@
     "jsx": true,
     "useJSXTextNode": true
   },
-  "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
-  ],
-  "plugins": ["@typescript-eslint", "react-hooks", "prettier"],
+//  "extends": [
+//    "plugin:@typescript-eslint/recommended",
+//    "plugin:prettier/recommended"
+//  ],
+//  "plugins": ["@typescript-eslint", "jest-dom", "prettier"],
   "rules": {
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "@typescript-eslint/explicit-function-return-type": "off"
   }
 }
