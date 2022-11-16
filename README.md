@@ -4,6 +4,12 @@
 
 Returns a regular expression for the match text, ignoring stresses and final ς
 
+## `getRegExpContent` method
+
+Επιστρέφει το περιεχόμενο ένος regular expression χρησιμοποιόντας το `match` ασχέτως τόνων και τελικών ς.
+
+Returns the content of a regular expression for the match text, ignoring stresses and final ς
+
 `getRegExp(match[, caseSensitive])`
 
 ### Parameters

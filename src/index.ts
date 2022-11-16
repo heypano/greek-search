@@ -2,14 +2,22 @@ import { conversionsArray } from "./conversions";
 import escapeStringRegexp from "escape-string-regexp";
 
 /**
- * Returns a regular expression for the match text, ignoring stresses and final ς
+ * Returns the content of a regular expression for the match text, ignoring stresses and final ς
  */
-export function getRegExp(match: string = "", caseSensitive: boolean = false) {
+export function getRegExpContent(match: string = "") {
   let regExpContent = escapeStringRegexp(match);
   for (const conversion of conversionsArray) {
     const replacementRegex = new RegExp(`[${conversion}]`, "g");
     regExpContent = regExpContent.replace(replacementRegex, `[${conversion}]`);
   }
+  return regExpContent;
+}
+
+/**
+ * Returns a regular expression for the match text, ignoring stresses and final ς
+ */
+export function getRegExp(match: string = "", caseSensitive: boolean = false) {
+  const regExpContent = getRegExpContent(match);
   const flags = ["g"];
   if (!caseSensitive) {
     flags.push("i");
