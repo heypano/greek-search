@@ -1,4 +1,4 @@
-import { greekSearch } from "./index";
+import { getRegExpContent, greekSearch } from "./index";
 
 let input = "";
 let match = "";
@@ -47,6 +47,36 @@ describe("Greek Search Tests", () => {
     expect(output).toBe(true);
     match = "αλος [] {} ()";
     output = greekSearch(input, match);
+    expect(output).toBe(false);
+  });
+
+  test("Extra Conversions Case Insensitive", () => {
+    const extraConversions = ["((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))"];
+
+    input = "ΆλλοΣ ιατρός";
+    match = "γιατρός";
+    output = greekSearch(input, match, false, extraConversions);
+    expect(output).toBe(true);
+
+    match = "ΓΙΑΤΡΟΣ";
+    output = greekSearch(input, match, false, extraConversions);
+    expect(output).toBe(true);
+
+    match = "γιατροος";
+    output = greekSearch(input, match, false, extraConversions);
+    expect(output).toBe(false);
+  });
+
+  test("Extra Conversions Case Sensitive", () => {
+    const extraConversions = ["((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))"];
+
+    input = "ΆλλοΣ ιατρός";
+    match = "γιατρός";
+    output = greekSearch(input, match, true, extraConversions);
+    expect(output).toBe(true);
+
+    match = "ΓΙΑΤΡΟΣ";
+    output = greekSearch(input, match, true, extraConversions);
     expect(output).toBe(false);
   });
 });

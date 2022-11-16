@@ -1,14 +1,23 @@
 import { conversionsArray } from "./conversions";
 import escapeStringRegexp from "escape-string-regexp";
 
+export const conversions = conversionsArray;
+
 /**
  * Returns the content of a regular expression for the match text, ignoring stresses and final ς
  */
-export function getRegExpContent(match: string = "") {
-  let regExpContent = escapeStringRegexp(match);
-  for (const conversion of conversionsArray) {
-    const replacementRegex = new RegExp(`[${conversion}]`, "g");
-    regExpContent = regExpContent.replace(replacementRegex, `[${conversion}]`);
+export function getRegExpContent(
+  match: string = "",
+  caseSensitive: boolean = false,
+  extraConversions: Array<string> = []
+) {
+  const usedMatch = caseSensitive ? match : match.toLocaleLowerCase();
+  let regExpContent = escapeStringRegexp(usedMatch);
+
+  const allConversions = [...extraConversions, ...conversionsArray];
+  for (const conversion of allConversions) {
+    const replacementRegex = new RegExp(conversion, "g");
+    regExpContent = regExpContent.replace(replacementRegex, conversion);
   }
   return regExpContent;
 }
@@ -16,8 +25,16 @@ export function getRegExpContent(match: string = "") {
 /**
  * Returns a regular expression for the match text, ignoring stresses and final ς
  */
-export function getRegExp(match: string = "", caseSensitive: boolean = false) {
-  const regExpContent = getRegExpContent(match);
+export function getRegExp(
+  match: string = "",
+  caseSensitive: boolean = false,
+  extraConversions: Array<string> = []
+) {
+  const regExpContent = getRegExpContent(
+    match,
+    caseSensitive,
+    extraConversions
+  );
   const flags = ["g"];
   if (!caseSensitive) {
     flags.push("i");
@@ -31,8 +48,9 @@ export function getRegExp(match: string = "", caseSensitive: boolean = false) {
 export function greekSearch(
   text: string = "", // the text to match
   match: string = "", // the original string to match
-  caseSensitive: boolean = false
+  caseSensitive: boolean = false,
+  extraConversions: Array<string> = []
 ): boolean {
-  const regEx = getRegExp(match, caseSensitive);
+  const regEx = getRegExp(match, caseSensitive, extraConversions);
   return regEx.test(text);
 }
