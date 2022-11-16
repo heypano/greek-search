@@ -7,7 +7,7 @@ import escapeStringRegexp from "escape-string-regexp";
 export function greekSearch(
   text: string = "", // the text to match
   match: string = "", // the original string to match
-  caseSensitive: boolean = true
+  caseSensitive: boolean = false
 ): boolean {
   let regExpContent = escapeStringRegexp(match);
   for (const conversion of conversionsArray) {
