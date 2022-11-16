@@ -1,11 +1,52 @@
 import { greekSearch } from "./index";
 
-const result = greekSearch("bla");
-console.log(result);
+let input = "";
+let match = "";
+let output = false;
+
 describe("Greek Search Tests", () => {
-  test("bla", () => {
-    const input = "bla";
-    const output = greekSearch(input);
-    expect(output).toBe(input);
+  test("Case Sensitive", () => {
+    input = "Κάποιος ΆλλοΣ";
+    match = "ΑλλοΣ";
+    output = greekSearch(input, match);
+    expect(output).toBe(true);
+    match = "ΆλλόΣ";
+    output = greekSearch(input, match);
+    expect(output).toBe(true);
+    match = "άλλος";
+    output = greekSearch(input, match);
+    expect(output).toBe(false);
+  });
+
+  test("Case Ιnsensitive", () => {
+    input = "Κάποιος ΆλλοΣ";
+    match = "ΑλλοΣ";
+    output = greekSearch(input, match, false);
+    expect(output).toBe(true);
+    match = "Άλλός";
+    output = greekSearch(input, match, false);
+    expect(output).toBe(true);
+    match = "αλλος";
+    output = greekSearch(input, match, false);
+    expect(output).toBe(true);
+    match = "αλος";
+    output = greekSearch(input, match, false);
+    expect(output).toBe(false);
+  });
+
+  test("Special Characters", () => {
+    input = "Κάποιος ΆλλοΣ [] {} ()";
+    match = "ΑλλοΣ [] {} ()";
+    output = greekSearch(input, match, false);
+    expect(output).toBe(true);
+    match = "Άλλός [] {} ()";
+    output = greekSearch(input, match, false);
+    expect(output).toBe(true);
+    match = "αλλος [] {} ()";
+    output = greekSearch(input, match, false);
+    expect(output).toBe(true);
+    match = "αλος [] {} ()";
+    output = greekSearch(input, match, false);
+    expect(output).toBe(false);
   });
 });

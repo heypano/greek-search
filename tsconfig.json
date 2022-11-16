@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es2016",
     "outDir": "dist",
+    "types": ["node", "jest"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
