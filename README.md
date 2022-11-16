@@ -73,3 +73,6 @@ Returns whether `text` contains `match` independent of stresses and final ς.
 
     match = "άλλος";
     output = greekSearch(input, match, false); // true
+
+
+[//]: # (Publish command: `yarn rollup && npm publish --access public`)
