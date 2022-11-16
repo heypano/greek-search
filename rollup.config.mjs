@@ -7,7 +7,7 @@ export default {
   output: [
     {
       file: "dist/index.js",
-      format: "es",
+      format: "cjs",
     },
   ],
   plugins: [peerDepsExternal(), resolve(), typescript()],
