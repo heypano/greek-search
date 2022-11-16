@@ -2,13 +2,9 @@ import { conversionsArray } from "./conversions";
 import escapeStringRegexp from "escape-string-regexp";
 
 /**
- * Returns whether or not text matches match, ignoring stresses and final ς
+ * Returns a regular expression for the match text, ignoring stresses and final ς
  */
-export function greekSearch(
-  text: string = "", // the text to match
-  match: string = "", // the original string to match
-  caseSensitive: boolean = false
-): boolean {
+export function getRegExp(match: string = "", caseSensitive: boolean = false) {
   let regExpContent = escapeStringRegexp(match);
   for (const conversion of conversionsArray) {
     const replacementRegex = new RegExp(`[${conversion}]`, "g");
@@ -18,6 +14,17 @@ export function greekSearch(
   if (!caseSensitive) {
     flags.push("i");
   }
-  const regEx = new RegExp(regExpContent, flags.join(""));
+  return new RegExp(regExpContent, flags.join(""));
+}
+
+/**
+ * Returns whether or not text matches match, ignoring stresses and final ς
+ */
+export function greekSearch(
+  text: string = "", // the text to match
+  match: string = "", // the original string to match
+  caseSensitive: boolean = false
+): boolean {
+  const regEx = getRegExp(match, caseSensitive);
   return regEx.test(text);
 }
