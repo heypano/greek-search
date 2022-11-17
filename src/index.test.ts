@@ -1,4 +1,4 @@
-import { getRegExpContent, greekSearch } from "./index";
+import { greekSearch } from "./index";
 
 let input = "";
 let match = "";

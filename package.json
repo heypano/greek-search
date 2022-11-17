@@ -45,13 +45,13 @@
     "prettier": "^2.7.1",
     "rollup": "^3.3.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-typescript2": "^0.34.1",
     "ts-jest": "^29.0.3",
     "tslib": "^2.4.1",
-    "typescript": "^4.9.3"
+    "typescript": "4.8.3"
   },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "escape-string-regexp": "^5.0.0"
+    "escape-string-regexp": "^5.0.0",
+    "eslint-plugin-jest-dom": "^4.0.3"
   }
 }

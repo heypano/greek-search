@@ -4,11 +4,11 @@
     "jsx": true,
     "useJSXTextNode": true
   },
-//  "extends": [
-//    "plugin:@typescript-eslint/recommended",
-//    "plugin:prettier/recommended"
-//  ],
-//  "plugins": ["@typescript-eslint", "jest-dom", "prettier"],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["@typescript-eslint", "jest-dom", "prettier"],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off"
   }

@@ -7,8 +7,8 @@ export const conversions = conversionsArray;
  * Returns the content of a regular expression for the match text, ignoring stresses and final ς
  */
 export function getRegExpContent(
-  match: string = "",
-  caseSensitive: boolean = false,
+  match = "",
+  caseSensitive = false,
   extraConversions: Array<string> = []
 ) {
   const usedMatch = caseSensitive ? match : match.toLocaleLowerCase();
@@ -26,8 +26,8 @@ export function getRegExpContent(
  * Returns a regular expression for the match text, ignoring stresses and final ς
  */
 export function getRegExp(
-  match: string = "",
-  caseSensitive: boolean = false,
+  match = "",
+  caseSensitive = false,
   extraConversions: Array<string> = []
 ) {
   const regExpContent = getRegExpContent(
@@ -46,9 +46,9 @@ export function getRegExp(
  * Returns whether or not text matches match, ignoring stresses and final ς
  */
 export function greekSearch(
-  text: string = "", // the text to match
-  match: string = "", // the original string to match
-  caseSensitive: boolean = false,
+  text = "", // the text to match
+  match = "", // the original string to match
+  caseSensitive = false,
   extraConversions: Array<string> = []
 ): boolean {
   const regEx = getRegExp(match, caseSensitive, extraConversions);
