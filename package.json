@@ -9,7 +9,11 @@
   ],
   "main": "dist/index.js",
   "scripts": {
+    "tsc": "tsc",
+    "prebuild": "npm run lint",
+    "build": "rollup",
     "rollup": "rollup -c",
+    "prelint": "tsc",
     "lint": "eslint src --ext .tsx,.ts",
     "lint-fix": "eslint src --ext .tsx,.ts --fix",
     "test": "jest"
