@@ -37,8 +37,7 @@ Returns whether `text` contains `match` independent of stresses and final ς.
     // Case Insensitive Search
     input = "Κάποιος ΆλΛοΣ";
     match = "ΆλλοΣ";
-    output = greekSearch(input, match);
-    expect(output).toBe(true);
+    output = greekSearch(input, match); // true
 
     match = "Αλλος";
     output = greekSearch(input, match); // true
