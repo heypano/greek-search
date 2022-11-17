@@ -34,21 +34,49 @@ Returns whether `text` contains `match` independent of stresses and final ς.
     
     let input, match, output;
 
-    // Case Sensitive Search
-    input = "Κάποιος ΆλλοΣ";
-    match = "ΑλλοΣ";
+    // Case Insensitive Search
+    input = "Κάποιος ΆλΛοΣ";
+    match = "ΆλλοΣ";
+    output = greekSearch(input, match);
+    expect(output).toBe(true);
+
+    match = "Αλλος";
     output = greekSearch(input, match); // true
 
-    match = "άλλος";
+    match = "αΛλΌσ";
+    output = greekSearch(input, match); // true
+
+    match = "αλλος";
+    output = greekSearch(input, match); // true
+
+    match = "αλος";
     output = greekSearch(input, match); // false
 
+    // Case Sensitive Search
 
-    // Case Inensitive Search
+    input = "Κάποιος ΆλλοΣ";
+    match = "ΆλλοΣ";
+    output = greekSearch(input, match, true); // true
+
+    match = "ΑλλοΣ";
+    output = greekSearch(input, match, true); // true
+
+    match = "ΆλλόΣ";
+    output = greekSearch(input, match, true); // true
 
     match = "άλλος";
-    output = greekSearch(input, match, false); // true
+    output = greekSearch(input, match, true); // false
 
+    // Extra Conversions
 
+    const extraConversions = ["((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))"];
+
+    input = "ΆλλοΣ ιατρός";
+    match = "γιατρός";
+    output = greekSearch(input, match, false, extraConversions); // true
+
+    match = "ΓΙΑΤΡΟΣ";
+    output = greekSearch(input, match, false, extraConversions); // true
 
 ## `getRegExp` method
 
