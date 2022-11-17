@@ -7,12 +7,18 @@ let output = false;
 describe("Greek Search Tests", () => {
   test("Case Sensitive", () => {
     input = "Κάποιος ΆλλοΣ";
+    match = "ΆλλοΣ";
+    output = greekSearch(input, match, true);
+    expect(output).toBe(true);
+
     match = "ΑλλοΣ";
     output = greekSearch(input, match, true);
     expect(output).toBe(true);
+
     match = "ΆλλόΣ";
     output = greekSearch(input, match, true);
     expect(output).toBe(true);
+
     match = "άλλος";
     output = greekSearch(input, match, true);
     expect(output).toBe(false);
@@ -20,15 +26,22 @@ describe("Greek Search Tests", () => {
 
   test("Case Ιnsensitive", () => {
     input = "Κάποιος ΆλΛοΣ";
+    match = "ΆλλοΣ";
+    output = greekSearch(input, match);
+    expect(output).toBe(true);
+
     match = "Αλλος";
     output = greekSearch(input, match);
     expect(output).toBe(true);
+
     match = "αΛλΌσ";
     output = greekSearch(input, match);
     expect(output).toBe(true);
+
     match = "αλλος";
     output = greekSearch(input, match);
     expect(output).toBe(true);
+
     match = "αλος";
     output = greekSearch(input, match);
     expect(output).toBe(false);
@@ -36,15 +49,22 @@ describe("Greek Search Tests", () => {
 
   test("Special Characters", () => {
     input = "Κάποιος ΆλλοΣ [] {} ()";
+    match = "ΆλλοΣ";
+    output = greekSearch(input, match);
+    expect(output).toBe(true);
+
     match = "ΑλλοΣ [] {} ()";
     output = greekSearch(input, match);
     expect(output).toBe(true);
+
     match = "Άλλός [] {} ()";
     output = greekSearch(input, match);
     expect(output).toBe(true);
+
     match = "αλλος [] {} ()";
     output = greekSearch(input, match);
     expect(output).toBe(true);
+
     match = "αλος [] {} ()";
     output = greekSearch(input, match);
     expect(output).toBe(false);
@@ -54,6 +74,10 @@ describe("Greek Search Tests", () => {
     const extraConversions = ["((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))"];
 
     input = "ΆλλοΣ ιατρός";
+    match = "ΆλλοΣ";
+    output = greekSearch(input, match, false, extraConversions);
+    expect(output).toBe(true);
+
     match = "γιατρός";
     output = greekSearch(input, match, false, extraConversions);
     expect(output).toBe(true);
@@ -71,6 +95,10 @@ describe("Greek Search Tests", () => {
     const extraConversions = ["((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))"];
 
     input = "ΆλλοΣ ιατρός";
+    match = "ΆλλοΣ";
+    output = greekSearch(input, match, true, extraConversions);
+    expect(output).toBe(true);
+
     match = "γιατρός";
     output = greekSearch(input, match, true, extraConversions);
     expect(output).toBe(true);
