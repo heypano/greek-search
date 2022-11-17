@@ -84,6 +84,6 @@ Returns the content of a regular expression for the match text, ignoring stresse
 - `caseSensitive`
   - Whether the search should be case sensitive (defaults to `false`)
 - `extraConversions`
-  - An array of replacements for regular expressions e.g. `((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))` 
+  - An array of replacements for regular expressions e.g. `["((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))"]` 
   
 [//]: # (Publish command: `yarn rollup && npm publish --access public`)
