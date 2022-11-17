@@ -1,6 +1,6 @@
 {
   "name": "@heypano/greek-search",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Pano Papadatos <pano@heypano.com>",
   "license": "ISC",
   "description": "Search greek text ignoring stresses",
