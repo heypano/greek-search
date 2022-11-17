@@ -19,11 +19,11 @@ describe("Greek Search Tests", () => {
   });
 
   test("Case Ιnsensitive", () => {
-    input = "Κάποιος ΆλλοΣ";
-    match = "ΑλλοΣ";
+    input = "Κάποιος ΆλΛοΣ";
+    match = "Αλλος";
     output = greekSearch(input, match);
     expect(output).toBe(true);
-    match = "Άλλός";
+    match = "αΛλΌσ";
     output = greekSearch(input, match);
     expect(output).toBe(true);
     match = "αλλος";
