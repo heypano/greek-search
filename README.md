@@ -6,6 +6,16 @@ A JS package for node or browser (TypeScript types exported) containing methods 
 
 Available methods: `greekSearch`, `getRegExpContent`, `getRegExp`
 
+# Installation
+
+Using npm:
+
+`npm i @heypano/greek-search`
+
+Using yarn:
+
+`yarn add @heypano/greek-search`
+
 # Documentation
 
 ## `greekSearch` method
