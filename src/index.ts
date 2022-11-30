@@ -64,7 +64,7 @@ export function trimAround(
   numWords = 4,
   addEllipses = true
 ) {
-  let flags = "g";
+  let flags = "";
   if (regex.ignoreCase) {
     flags += "i";
   }
