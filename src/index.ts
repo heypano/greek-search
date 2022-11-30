@@ -64,18 +64,23 @@ export function trimAround(
   numWords = 4,
   addEllipses = true
 ) {
-  let flags = "";
+  let flags = "g";
   if (regex.ignoreCase) {
-    flags = "i";
+    flags += "i";
   }
   const newRegExp = new RegExp(
-    `((\\S+\\s*)\{0,${numWords}\})(${regex.source})((\\S+\\s*)\{0,${numWords}\})`,
+    `(?:(?:\\S+\\s*)\{0,${numWords}\})(?:${regex.source})(?:(?:\\S+\\s*)\{0,${numWords}\})`,
     flags
   );
   const matches = text.match(newRegExp) || [];
-  const result = matches.join("").trim();
-  if (addEllipses) {
-    return `...${result}...`;
-  }
+  const result = matches
+    .map((r) => {
+      if (addEllipses) {
+        return `...${r.trim()}...`;
+      }
+      return r;
+    })
+    .join("\n");
+
   return result;
 }

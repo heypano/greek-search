@@ -118,4 +118,14 @@ describe("Greek Search Tests", () => {
       "...discovered on floor. Am in trouble, roll over, too..."
     );
   });
+  test("Trim Around - duplication", () => {
+    const textToTrim =
+      "Flee in terror at cucumber discovered on floor. Am in trouble, roll over, too cute for human to get mad. Am in trouble, roll over, too cute for human to get mad. Am in trouble, roll over, too cute for human to get mad.";
+    const regExp = new RegExp("in trouble", "ig");
+    const numWords = 4;
+    const result = trimAround(textToTrim, regExp, numWords);
+    expect(result).toBe(
+      "...discovered on floor. Am in trouble, roll over, too...\n...to get mad. Am in trouble, roll over, too...\n...to get mad. Am in trouble, roll over, too..."
+    );
+  });
 });
