@@ -130,7 +130,7 @@ Returns the content of a regular expression for the match text, ignoring stresse
 
 Returns a string containing `numWords` words around the matches `regex` for `text`
 
-`function trimAround(text, regex [, numWords = 4, addEllipses = true])`
+`function trimAround(text, regex [, numWords = 8, addEllipses = true])`
 
 ### Parameters
 
