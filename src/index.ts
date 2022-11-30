@@ -54,3 +54,28 @@ export function greekSearch(
   const regEx = getRegExp(match, caseSensitive, extraConversions);
   return regEx.test(text);
 }
+
+/**
+ * Return content around the matched string
+ */
+export function trimAround(
+  text = "",
+  regex = /.*/,
+  numWords = 4,
+  addEllipses = true
+) {
+  let flags = "g";
+  if (regex.ignoreCase) {
+    flags += "i";
+  }
+  const newRegExp = new RegExp(
+    `((\\S+\\s*)\{0,${numWords}\})(${regex.source})((\\S+\\s*)\{0,${numWords}\})`,
+    flags
+  );
+  const matches = text.match(newRegExp) || [];
+  const result = matches.join("").trim();
+  if (addEllipses) {
+    return `...${result}...`;
+  }
+  return result;
+}

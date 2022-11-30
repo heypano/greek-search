@@ -122,5 +122,25 @@ Returns the content of a regular expression for the match text, ignoring stresse
   - Whether the search should be case sensitive (defaults to `false`)
 - `extraConversions`
   - An array of replacements for regular expressions e.g. `["((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))"]` 
-  
+
+
+## `trimAround` method
+
+Επιστρέφει ένα string με περιεχόμενο `numWords` λέξεις γύρω από τα matches του `regex` για το `text`.
+
+Returns a string containing `numWords` words around the matches `regex` for `text`
+
+`function trimAround(text, regex [, numWords = 4, addEllipses = true])`
+
+### Parameters
+
+- `text`
+  - The text to examine
+- `regex`
+  - The regular expression to use
+- `numWords`
+  - How many words around the text
+- `addEllipses`
+  - Should add "..." to the start and end
+
 [//]: # (Publish command: `yarn rollup && npm publish --access public`)

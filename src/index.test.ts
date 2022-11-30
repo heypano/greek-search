@@ -1,4 +1,4 @@
-import { greekSearch } from "./index";
+import { greekSearch, trimAround } from "./index";
 
 let input = "";
 let match = "";
@@ -106,5 +106,16 @@ describe("Greek Search Tests", () => {
     match = "ΓΙΑΤΡΟΣ";
     output = greekSearch(input, match, true, extraConversions);
     expect(output).toBe(false);
+  });
+
+  test("Trim Around", () => {
+    const textToTrim =
+      "Flee in terror at cucumber discovered on floor. Am in trouble, roll over, too cute for human to get mad.";
+    const regExp = new RegExp("in trouble", "ig");
+    const numWords = 4;
+    const result = trimAround(textToTrim, regExp, numWords);
+    expect(result).toBe(
+      "...discovered on floor. Am in trouble, roll over, too..."
+    );
   });
 });
