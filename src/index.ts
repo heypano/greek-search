@@ -66,7 +66,7 @@ export function trimAround(
 ) {
   let flags = "";
   if (regex.ignoreCase) {
-    flags += "i";
+    flags = "i";
   }
   const newRegExp = new RegExp(
     `((\\S+\\s*)\{0,${numWords}\})(${regex.source})((\\S+\\s*)\{0,${numWords}\})`,
