@@ -61,7 +61,7 @@ export function greekSearch(
 export function trimAround(
   text = "",
   regex = /.*/,
-  numWords = 8,
+  numWords = 4,
   addEllipses = true
 ) {
   let flags = "g";
