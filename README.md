@@ -1,146 +1,175 @@
 # `@heypano/greek-search`
 
-Ένα JS package για node ή browser (με TypeScript types) με μεθόδους που διευκολύνουν την αναζήτηση ελληνικού κειμένου
+Ένα JS package για node ή browser (με TypeScript types) με μεθόδους που διευκολύνουν την αναζήτηση ελληνικού κειμένου.
 
-A JS package for node or browser (TypeScript types exported) containing methods  for searching greek text while ignoring stresses and final s
+A JS package for node or the browser (TypeScript types included) for searching Greek text: ignores accents, final sigma, decomposed input, look-alike characters, and optionally matches **greeklish**.
 
-Available methods: `greekSearch`, `getRegExpContent`, `getRegExp`
+```js
+import { greekSearch } from "@heypano/greek-search";
+
+greekSearch("Κάποιος ΆλΛοΣ", "αλλος");                    // true
+greekSearch("Ο γιατρός", "giatros", { greeklish: true }); // true
+```
 
 # Installation
 
-Using npm:
+```
+npm i @heypano/greek-search
+```
 
-`npm i @heypano/greek-search`
+Ships CommonJS and ESM builds with TypeScript declarations for both, and has **no runtime dependencies**.
 
-Using yarn:
+# Quick reference
 
-`yarn add @heypano/greek-search`
+| function | what it does |
+|---|---|
+| `greekSearch(text, match, options?)` | boolean predicate |
+| `greekMatches(text, match, options?)` | match offsets, for highlighting |
+| `greekNormalize(text, options?)` / `foldGreek` | fold to the canonical search form |
+| `foldGreekWithMap(text, options?)` | fold plus a map back to the original offsets |
+| `greekKey(folded)` / `greeklishKeys(folded)` | the greeklish primitives |
+| `trimAround(text, regex, numWords?, addEllipses?)` | snippets with context |
+| `greekCompare` / `greekCollator(options?)` | sorting Greek correctly |
 
-# Documentation
+## `greekSearch(text, match[, options])`
 
-## `greekSearch` method
+Επιστρέφει εαν το `text` περιέχει το `match`, ασχέτως τόνων και τελικών ς.
 
-Επιστρέφει εαν το `text` περιέχει το `match` ασχέτως τόνων και τελικών ς.
+Returns whether `text` contains `match`, independent of accents and final ς.
 
-Returns whether `text` contains `match` independent of stresses and final ς.
+```js
+greekSearch("Κάποιος ΆλΛοΣ", "ΆλλοΣ");  // true
+greekSearch("Κάποιος ΆλΛοΣ", "αΛλΌσ");  // true
+greekSearch("Κάποιος ΆλΛοΣ", "αλος");   // false
+```
 
-`greekSearch(text, match[, caseSensitive, extraConversions])`
+It also handles, by default, several things a character class cannot:
 
+```js
+// Decomposed (NFD) text, found on roughly 2% of Greek web pages
+greekSearch("Κάποιος άλλος".normalize("NFD"), "αλλος");  // true
 
-### Parameters
+// Look-alike characters: a Latin capital opening a Greek word
+greekSearch("Oδύσσεια", "Οδύσσεια");                     // true  (Latin O)
+greekSearch("στo σπίτι", "στο");                         // true  (Latin o)
 
-- `text`
-  - The source string to search
-- `match`
-  - The text to look for
-- `caseSensitive`
-  - Whether the search should be case sensitive (defaults to `false`)
-- `extraConversions`
-  - An array of replacements for regular expressions e.g. `((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))`
+// Lunate sigma, symbol letterforms, maths Greek
+greekSearch("ΟΔΟϹ", "οδός");                             // true
+```
 
-## Sample Usage
+### Options
 
-    import { greekSearch } from "@heypano/greek-search";
-    
-    let input, match, output;
+```ts
+interface SearchOptions {
+  caseSensitive?: boolean;    // default false
+  accentSensitive?: boolean;  // default false
+  greeklish?: boolean;        // default false
+  homoglyphs?: boolean;       // default true
+  letterforms?: boolean;      // default true
+  wholeWord?: boolean;        // default false
+  synonyms?: string[][];
+  maxKeys?: number;           // greeklish fan-out cap, default 64
+}
+```
 
-    // Case Insensitive Search
-    input = "Κάποιος ΆλΛοΣ";
-    match = "ΆλλοΣ";
-    output = greekSearch(input, match); // true
+`caseSensitive` and `accentSensitive` are independent. The old positional form,
+`greekSearch(text, match, caseSensitive, extraConversions)`, still works.
 
-    match = "Αλλος";
-    output = greekSearch(input, match); // true
+## `greekMatches(text, match[, options])`
 
-    match = "αΛλΌσ";
-    output = greekSearch(input, match); // true
+Returns `Array<{ start, end }>` of offsets into the **original** text, so you can highlight without re-deriving anything. Offsets survive folding, decomposition and greeklish.
 
-    match = "αλλος";
-    output = greekSearch(input, match); // true
+```js
+const text = "Ο γιατρός και ο γιατρός";
+greekMatches(text, "ΓΙΑΤΡΟΣ");
+// [ { start: 2, end: 9 }, { start: 16, end: 23 } ]
+text.slice(2, 9); // "γιατρός"
+```
 
-    match = "αλος";
-    output = greekSearch(input, match); // false
+## Greeklish
 
-    // Case Sensitive Search
+Off by default, so a Greek query against Greek text stays exact. Turn it on and all three transliteration conventions work, in both directions:
 
-    input = "Κάποιος ΆλλοΣ";
-    match = "ΆλλοΣ";
-    output = greekSearch(input, match, true); // true
+```js
+const opts = { greeklish: true };
+greekSearch("Θεσσαλονίκη", "thessaloniki", opts);  // true  (phonetic)
+greekSearch("Θεσσαλονίκη", "8essalonikh", opts);   // true  (visual)
+greekSearch("Θεσσαλονίκη", "uessalonikh", opts);   // true  (keyboard)
+greekSearch("to 3enodoxeio", "ξενοδοχείο", opts);  // true  (the other direction)
+```
 
-    match = "ΑλλοΣ";
-    output = greekSearch(input, match, true); // true
+Both sides fold to a lossy key. Greek to key is deterministic, greeklish to key fans out into a bounded candidate set, and the text itself resolves the ambiguity. Highlighting still works, because a greeklish query returns offsets into the original Greek.
 
-    match = "ΆλλόΣ";
-    output = greekSearch(input, match, true); // true
+**Known collisions.** The key is lossy on purpose, so some distinct words merge. Most are genuine homophones and users are not surprised by them:
 
-    match = "άλλος";
-    output = greekSearch(input, match, true); // false
+```
+τείχος / τοίχος     κάλος / καλός     ώρα / όρα     ναι / νε
+χέρι / ξέρει        δύνω / ντύνω      ύλη / ήλη / ίλη
+```
 
-    // Extra Conversions
+`χέρι`/`ξέρει` and `δύνω`/`ντύνω` are not homophones; they merge because `χ` and `ξ` both say `x`, and `δ` and `ντ` both say `d`. This is a deliberate recall-over-precision trade.
 
-    const extraConversions = ["((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))"];
+`αυ` and `αφ` are kept apart (`αυτό` and `αφτό` get different keys), while a query of `afto`, `auto` or `ayto` still finds either. Recall without the merge.
 
-    input = "ΆλλοΣ ιατρός";
-    match = "γιατρός";
-    output = greekSearch(input, match, false, extraConversions); // true
+## Synonyms
 
-    match = "ΓΙΑΤΡΟΣ";
-    output = greekSearch(input, match, false, extraConversions); // true
+Plain data, no regex, no escaping:
 
-## `getRegExp` method
+```js
+greekSearch("Άλλος ιατρός", "γιατρός", {
+  synonyms: [["γιατρός", "ιατρός"], ["ξενοδοχείο", "hotel"]],
+});  // true
+```
 
-Επιστρέφει ένα regular expression χρησιμοποιόντας το `match` ασχέτως τόνων και τελικών ς.
+Every term is folded, so accent and case variants collapse on their own.
 
-Returns a regular expression for the match text, ignoring stresses and final ς
+## `trimAround(text, regex[, numWords, addEllipses])`
 
-`getRegExp(match[, caseSensitive, extraConversions])`
+Returns up to `numWords` words of context around each match, one per line.
 
+```js
+trimAround("one two three needle four five six", /needle/g, 2);
+// "...two three needle four five..."
+```
 
-### Parameters
+## Sorting
 
-- `match`
-  - The text to look for
-- `caseSensitive`
-  - Whether the search should be case sensitive (defaults to `false`)
-- `extraConversions`
-  - An array of replacements for regular expressions e.g. `((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))`
+```js
+["Ω", "Α", "Ζ", "ά", "Β"].sort(greekCompare);  // Α, ά, Β, Ζ, Ω
+["Ω", "Α", "Ζ", "ά", "Β"].sort();              // Α, Β, Ζ, Ω, ά  (wrong)
+```
 
+## Performance
 
-## `getRegExpContent` method
+`greekNormalize` is exposed so a corpus can be folded once instead of on every query:
 
-Επιστρέφει το περιεχόμενο ένος regular expression χρησιμοποιόντας το `match` ασχέτως τόνων και τελικών ς.
+```js
+const index = docs.map((d) => ({ doc: d, key: greekNormalize(d.body) }));
+const q = greekNormalize(query);
+index.filter(({ key }) => key.includes(q));
+```
 
-Returns the content of a regular expression for the match text, ignoring stresses and final ς
+## Stemming
 
-`getRegExp(match[, caseSensitive, extraConversions])`
+Out of scope here, but it composes. Greek declension (`γιατρός` / `γιατρού` / `γιατροί`) is the biggest remaining recall gap, and a stemmer wants exactly the accent-stripped uppercase input that `greekNormalize` produces:
 
-### Parameters
+```js
+import stemmer from "greek-stemmer";
+stemmer(greekNormalize("γιατροί").toUpperCase());  // "ΓΙΑΤΡ"
+```
 
-- `match`
-  - The text to look for
-- `caseSensitive`
-  - Whether the search should be case sensitive (defaults to `false`)
-- `extraConversions`
-  - An array of replacements for regular expressions e.g. `["((ιατρος)|(γιατρος)|(ιατρός)|(γιατρός))"]` 
+Note that `greek-stemmer` is lightly maintained and pulls in `lodash@3`, so weigh it before taking the dependency.
 
+# Deprecated
 
-## `trimAround` method
+`getRegExp`, `getRegExpContent`, `conversions` and the `extraConversions` option remain exported and working, but are superseded.
 
-Επιστρέφει ένα string με περιεχόμενο `numWords` λέξεις γύρω από τα matches του `regex` για το `text`.
+A character class cannot express `ου` to `u`, cannot be validated under the `u` flag, and never sees decomposed input. `extraConversions` additionally asks callers to write a regex fragment that also matches its own literal alternatives, and splices it into the pattern unescaped. Use `synonyms` instead.
 
-Returns a string containing `numWords` words around the matches `regex` for `text`
+`getRegExp` returns an expression carrying the `g` flag, which is **stateful**: `test` and `exec` advance `lastIndex`, so repeated checks on one instance alternate between true and false. Use `greekSearch` for a predicate and `greekMatches` for offsets.
 
-`function trimAround(text, regex [, numWords = 8, addEllipses = true])`
+# Notes
 
-### Parameters
+Modern Greek only. Polytonic is explicitly out of scope; the only Greek Extended codepoints handled are the oxia forms, which `NFC` folds onto ordinary tonos for free.
 
-- `text`
-  - The text to examine
-- `regex`
-  - The regular expression to use
-- `numWords`
-  - How many words around the text
-- `addEllipses`
-  - Should add "..." to the start and end
-
-[//]: # (Publish command: `yarn rollup && npm publish --access public`)
+Greek ordinals such as `ΦΕΚ Α΄ 251` and `Μακάριος Γ΄` are preserved. This is why the library normalizes with `NFC` and an explicit letterform table rather than `NFKC`, which decomposes `U+0384` into a space plus a combining acute and splits ordinals in two.

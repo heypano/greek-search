@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "es2019",
+    "lib": ["ES2020"],  // String.prototype.matchAll
     "outDir": "dist",
-    "types": ["node", "jest"],
+    "types": [],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -13,10 +14,6 @@
     "declaration": true,
     "declarationDir": "dist"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "**/*.test.ts"
-  ]
+  "include": ["src"],
+  "exclude": ["**/*.test.ts"]
 }
